@@ -1,5 +1,6 @@
 const redux = require("redux");
 const createStore = redux.createStore;
+const combineReducers =redux.combineReducers
 
 const BUY_CAKE = "BUY_CAKE";
 const BUY_PIZZA="BUY_PIZZA";
@@ -21,33 +22,69 @@ const buyPizza=()=>{
 
 // (previousState, action) => newState
 
-const initialState = {
-  numberOfCake: 10,
-  numberOfPizza:15,
-};
+// const initialState = {
+//   numberOfCake: 10,
+//   numberOfPizzas:15,
+// };
+
+const initialCakeState={
+    numberOfCake:10
+}
+
+const initialPizzaState={
+    numberOfPizzas:20
+}
 
 // Reducer
 
-const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case BUY_CAKE:
-      return {
-        ...state,
-        numberOfCake: state.numberOfCake - 1,
-      };
-      case BUY_PIZZA: return {
-          ...state,
-          numberOfPizza:state.numberOfPizza -1,
-      }
+// const reducer = (state = initialState, action) => {
+//   switch (action.type) {
+//     case BUY_CAKE:
+//       return {
+//         ...state,
+//         numberOfCake: state.numberOfCake - 1,
+//       };
+//       case BUY_PIZZA: return {
+//           ...state,
+//           numberOfPizzas:state.numberOfPizzas -1,
+//       }
 
-    default:
-      return state;
-  }
-};
+//     default:
+//       return state;
+//   }
+// };
 
+
+const cakeReducer=(state=initialCakeState,action)=>{
+    switch(action.type){
+        case BUY_CAKE: return {
+            ...state,
+            numberOfCake: state.numberOfCake -1
+        }
+        default: return state
+    }
+    
+}
+
+const pizzaReducer=(state=initialPizzaState,action)=>{
+    switch(action.type){
+        case BUY_PIZZA: return {
+            ...state,
+            numberOfPizzas:state.numberOfPizzas -1
+        }
+        default: return state
+    }
+
+}
 
 // Store 
-const store = createStore(reducer)
+
+const rootReducers=combineReducers({
+    cake:cakeReducer,
+    pizza:pizzaReducer,
+})
+
+const store = createStore(rootReducers)
 console.log("initial state",store.getState());
 
 //store.subscribe(()=>console.log("updated state",store.getState()))
